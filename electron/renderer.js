@@ -2,10 +2,11 @@
 const btn = document.getElementById("btn");
 const text = document.getElementById("api")
 const tick = document.getElementById("ticker")
-
+const tradingType = document.getElementById("style");
+const history = document.getElementById("hist")
 btn.addEventListener("click", () =>{
   
-const url = `http://127.0.0.1:5000/sma?tick=${tick.value}&range=20&hist=1y`;
+const url = `http://127.0.0.1:5000/${tradingType.value}?tick=${tick.value}&range=20&hist=${history.value}`;
 fetch(url, {
   mode: 'cors'
 })
@@ -24,6 +25,9 @@ fetch(url, {
   }
   })
 })
+
+//add event listener for style.
+// sma option needs a window for window to dynamically pop up.
 
 function parseData(close_data){
   labels2 = []
