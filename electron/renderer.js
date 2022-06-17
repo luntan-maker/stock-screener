@@ -12,6 +12,7 @@ const slotMultiData = document.getElementById("slotForData")
 const multiSmaBtn = document.getElementById("addSMA")
 const slotMultiSma = document.getElementById("slotForSMA")
 
+const multiChartBtn = document.getElementById("multiChartButton")
 
 btn.addEventListener("click", async () =>{
   console.log("Hello")
@@ -111,9 +112,9 @@ checkBox.addEventListener("change", () => {
 dateRange = ["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"]
 intervalRange=["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]
 multiDataBtn.addEventListener("click", () => {
-  
 
-  date = document.createElement("select")
+
+  var date = document.createElement("select")
   for (var i = 0; i < dateRange.length; i++){
     var option = document.createElement("option");
     option.value = dateRange[i];
@@ -121,18 +122,106 @@ multiDataBtn.addEventListener("click", () => {
     date.appendChild(option)
   }
 
-  interval = document.createElement("select")
+  var interval = document.createElement("select")
   for (var j = 0; j < intervalRange.length; j++){
     var option = document.createElement("option");
-    option.value = intervalRange[i];
-    option.text = intervalRange[i];
+    option.value = intervalRange[j];
+    option.text = intervalRange[j];
     interval.appendChild(option)
   }
 
-  slotMultiData.appendChild(date)
-  slotMultiData.appendChild(interval)
+  var intervalLabel = document.createElement("label")
+  intervalLabel.innerHTML = "Interval range: " 
+
+  var dateLabel = document.createElement("label")
+  dateLabel.innerHTML = "Date range: " 
+
+  var tickerLabel = document.createElement("label")
+  tickerLabel.innerHTML = "Ticker: "
+  var tickerInput = document.createElement("input")
+
+  var deleteButton = document.createElement("button")
+  deleteButton.textContent = "Delete"
+  deleteButton.addEventListener("click", (event)=>{
+    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+  })
+
+  throwAwayDiv = document.createElement("div")
+
+  var breakInContent = document.createElement("br")
+
+  throwAwayDiv.appendChild(tickerLabel)
+  throwAwayDiv.appendChild(tickerInput)
+  throwAwayDiv.appendChild(dateLabel)
+  throwAwayDiv.appendChild(date)
+  throwAwayDiv.appendChild(intervalLabel)
+  throwAwayDiv.appendChild(interval)
+  throwAwayDiv.appendChild(deleteButton)
+  throwAwayDiv.appendChild(breakInContent)
+  slotMultiData.appendChild(throwAwayDiv)
 })
 
 multiSmaBtn.addEventListener("click", ()=>{
-  alert("SMA")
+
+  var date = document.createElement("select")
+  for (var i = 0; i < dateRange.length; i++){
+    var option = document.createElement("option");
+    option.value = dateRange[i];
+    option.text = dateRange[i];
+    date.appendChild(option)
+  }
+
+  var interval = document.createElement("select")
+  for (var j = 0; j < intervalRange.length; j++){
+    var option = document.createElement("option");
+    option.value = intervalRange[j];
+    option.text = intervalRange[j];
+    interval.appendChild(option)
+  }
+
+  var intervalLabel = document.createElement("label")
+  intervalLabel.innerHTML = "Interval range: " 
+
+  var dateLabel = document.createElement("label")
+  dateLabel.innerHTML = "Date range: " 
+
+  var tickerLabel = document.createElement("label")
+  tickerLabel.innerHTML = "Ticker: "
+  var tickerInput = document.createElement("input")
+
+  var deleteButton = document.createElement("button")
+  deleteButton.textContent = "Delete"
+  deleteButton.addEventListener("click", (event)=>{
+    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+  })
+
+  throwAwayDiv = document.createElement("div")
+
+  rangeLabel = document.createElement("label")
+  range=document.createElement("input")
+  rangeLabel.innerHTML="SMA Range: "
+
+  var breakInContent = document.createElement("br")
+
+  throwAwayDiv.appendChild(tickerLabel)
+  throwAwayDiv.appendChild(tickerInput)
+  throwAwayDiv.appendChild(dateLabel)
+  throwAwayDiv.appendChild(date)
+  throwAwayDiv.appendChild(intervalLabel)
+  throwAwayDiv.appendChild(interval)
+  throwAwayDiv.appendChild(rangeLabel)
+  throwAwayDiv.appendChild(range)
+  throwAwayDiv.appendChild(deleteButton)
+  throwAwayDiv.appendChild(breakInContent)
+  slotMultiSma.appendChild(throwAwayDiv)
+})
+
+multiChartBtn.addEventListener("click", () => {
+  // Outline for the button:
+  // Iterate through each child element of slotMultiSma and slotMultiData
+  // Collect the data and start fetching from the backend
+  // Store the data/labels in arrays
+  // Iterate through the arrays to plot mulitiple plots
+  console.log(slotMultiSma.childElementCount)
+  // alert("Clicked the chart button!")
 })
