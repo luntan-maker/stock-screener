@@ -13,14 +13,45 @@
     <!-- <h1>Hello World!</h1> -->
     <!-- What I got from the api! <span id="api"></span> -->
     <!-- <canvas id="myChart" width="400" height="400"></canvas> -->
+    <label>Ticker: </label>
     <input type="text" id="ticker">
+
+    <label>Chart type: </label>
     <select name="style" id="style">
+      <option value="data">Data</option>
       <option value="sma">SMA</option>
     </select>
+    <label>Date range: </label>
     <select name="hist" id="hist">
+      <option value="1d">1d</option>
+      <option value="5d">5d</option>
+      <option value="1mo">1mo</option>
+      <option value="3mo">3mo</option>
+      <option value="6mo">6mo</option>
       <option value="1y">1y</option>
       <option value="2y">2y</option>
+      <option value="5y">5y</option>
+      <option value="10y">10y</option>
+      <option value="ytd">ytd</option>
+      <option value="max">Max</option>
     </select>
+    <label>Interval range: </label>
+    <select name="inter" id="inter">
+      <option value="1m">1m</option>
+      <option value="2m">2m</option>
+      <option value="5m">5m</option>
+      <option value="15m">15m</option>
+      <option value="30m">30m</option>
+      <option value="60m">60m</option>
+      <option value="90m">90m</option>
+      <option value="1h">1h</option>
+      <option value="1d">1d</option>
+      <option value="5d">5d</option>
+      <option value="1wk">1wk</option>
+      <option value="1mo">1mo</option>
+      <option value="3mo">3mo</option>
+    </select>
+    <div id="extraOptions"></div>
     <button id = "btn" >Click here!</button>
     <div id="myDiv"></div>
     <!-- You can also require other files to run in this process -->

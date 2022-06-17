@@ -22,14 +22,23 @@ def hello_world():
     return "Hello, Worlds!"
     # return "<p>Hello, World!</p>"
 
+@app.route("/data")
+def data():
+    ticker = request.args.get("tick")
+    hist_of = request.args.get("hist")
+    interval = request.args.get("interval")
+
+    return regularData(ticker, hist_of, interval)
+
 
 @app.route("/sma")# @cross_origin()
 def SMA():
     ticker = request.args.get("tick")
     range_of = request.args.get("range")
     hist_of = request.args.get("hist")
+    interval = request.args.get("interval")
 
-    return sma(ticker, hist_of, range_of)
+    return sma(ticker, hist_of, range_of, interval)
 
     # Start server with electron
     # end server with electron

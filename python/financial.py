@@ -2,10 +2,14 @@ import yfinance as yf
 
 import pandas as pd
 
-def sma(ticker, hist_of, range):
+def sma(ticker, hist_of, range, interval):
     df = yf.Ticker(ticker)
-    df = df.history(hist_of)#1y
+    df = df.history(hist_of, interval="1mo")#1y
     df.drop(columns=['Dividends', 'Stock Splits'], inplace=True)
     range = int(range)
-    # df["SMA"]=df.Close.rolling(range).mean()
     return df.rolling(range).mean().to_json()
+
+def regularData(ticker, hist_of, interval):
+    df = yf.Ticker(ticker)
+    df = df.history(hist_of, interval=interval)
+    return df.to_json()
