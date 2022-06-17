@@ -5,7 +5,15 @@ const tick = document.getElementById("ticker")
 const tradingType = document.getElementById("style");
 const history = document.getElementById("hist")
 const interval = document.getElementById("inter")
-btn.addEventListener("click", () =>{
+
+const multiDataBtn = document.getElementById("addData")
+const slotMultiData = document.getElementById("slotForData")
+
+const multiSmaBtn = document.getElementById("addSMA")
+const slotMultiSma = document.getElementById("slotForSMA")
+
+
+btn.addEventListener("click", async () =>{
   console.log("Hello")
   url=""
   console.log(tradingType.value)
@@ -15,14 +23,15 @@ btn.addEventListener("click", () =>{
   } else if(tradingType.value == "data"){
     url = `http://127.0.0.1:5000/${tradingType.value}?tick=${tick.value}&hist=${history.value}&interval=${interval.value}`;
   } else{
-    url = ""
+    alert("Nothing was caught for selection!")
+    // url = ""
   }
-  fetch(url, {
+  await fetch(url, {
     mode: 'cors'
   })
   .then(data=>{return data.text().then(text2 =>{
       var close_data = JSON.parse(text2).Close
-      // console.log(close_data)
+      console.log(close_data)
       var data = parseData(close_data);
       var labels = data[0]
       var datum = data[1]
@@ -81,4 +90,49 @@ function plotData(labels, data){
   
 }
 
+const checkBox = document.getElementById("multigraph")
 
+checkBox.addEventListener("change", () => {
+  singleChart = document.getElementById("singleChart")
+  multiChart = document.getElementById("multiChart")
+  if(checkBox.checked){
+    // singleChart.style.height = "0px"
+    singleChart.style.display="none"
+    multiChart.style.display="block"
+    
+  } else{
+    singleChart.style.display="block"
+    multiChart.style.display="none"
+    
+
+  }
+})
+
+dateRange = ["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"]
+intervalRange=["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]
+multiDataBtn.addEventListener("click", () => {
+  
+
+  date = document.createElement("select")
+  for (var i = 0; i < dateRange.length; i++){
+    var option = document.createElement("option");
+    option.value = dateRange[i];
+    option.text = dateRange[i];
+    date.appendChild(option)
+  }
+
+  interval = document.createElement("select")
+  for (var j = 0; j < intervalRange.length; j++){
+    var option = document.createElement("option");
+    option.value = intervalRange[i];
+    option.text = intervalRange[i];
+    interval.appendChild(option)
+  }
+
+  slotMultiData.appendChild(date)
+  slotMultiData.appendChild(interval)
+})
+
+multiSmaBtn.addEventListener("click", ()=>{
+  alert("SMA")
+})

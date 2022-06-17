@@ -4,7 +4,7 @@ import pandas as pd
 
 def sma(ticker, hist_of, range, interval):
     df = yf.Ticker(ticker)
-    df = df.history(hist_of, interval="1mo")#1y
+    df = df.history(hist_of, interval=interval)#1y
     df.drop(columns=['Dividends', 'Stock Splits'], inplace=True)
     range = int(range)
     return df.rolling(range).mean().to_json()
