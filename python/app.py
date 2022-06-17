@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from financial import *
 
 app = Flask(__name__)
@@ -39,11 +39,3 @@ def SMA():
     interval = request.args.get("interval")
 
     return sma(ticker, hist_of, range_of, interval)
-
-    # Start server with electron
-    # end server with electron
-    # Query data with query strings
-    #     Return json
-    # Use json for chart
-
-
