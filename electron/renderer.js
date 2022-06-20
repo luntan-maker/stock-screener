@@ -1,3 +1,5 @@
+// const { range } = require("lodash");
+
 // Ctrl+F5 to refresh the page in http-server .
 const btn = document.getElementById("btn");
 const text = document.getElementById("api")
@@ -5,14 +7,15 @@ const tick = document.getElementById("ticker")
 const tradingType = document.getElementById("style");
 const history = document.getElementById("hist")
 const interval = document.getElementById("inter")
-
 const multiDataBtn = document.getElementById("addData")
 const slotMultiData = document.getElementById("slotForData")
-
 const multiSmaBtn = document.getElementById("addSMA")
 const slotMultiSma = document.getElementById("slotForSMA")
-
 const multiChartBtn = document.getElementById("multiChartButton")
+const checkBox = document.getElementById("multigraph")
+dateRange = ["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"]
+intervalRange=["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]
+
 
 btn.addEventListener("click", async () =>{
   console.log("Hello")
@@ -46,8 +49,7 @@ btn.addEventListener("click", async () =>{
     })
 })
 
-//add event listener for style.
-// sma option needs a window for window to dynamically pop up.
+
 tradingType.addEventListener("change", () => {
   const extra_stuff = document.getElementById("extraOptions")
   if(tradingType.value == "sma"){
@@ -64,7 +66,7 @@ tradingType.addEventListener("change", () => {
   }
 
 })
-// Check boxes for multiple plots at the same time?
+
 
 
 function parseData(close_data){
@@ -91,8 +93,6 @@ function plotData(labels, data){
   
 }
 
-const checkBox = document.getElementById("multigraph")
-
 checkBox.addEventListener("change", () => {
   singleChart = document.getElementById("singleChart")
   multiChart = document.getElementById("multiChart")
@@ -109,12 +109,11 @@ checkBox.addEventListener("change", () => {
   }
 })
 
-dateRange = ["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"]
-intervalRange=["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]
 multiDataBtn.addEventListener("click", () => {
 
 
   var date = document.createElement("select")
+  date.id="date"
   for (var i = 0; i < dateRange.length; i++){
     var option = document.createElement("option");
     option.value = dateRange[i];
@@ -123,6 +122,7 @@ multiDataBtn.addEventListener("click", () => {
   }
 
   var interval = document.createElement("select")
+  interval.id="interval"
   for (var j = 0; j < intervalRange.length; j++){
     var option = document.createElement("option");
     option.value = intervalRange[j];
@@ -139,6 +139,8 @@ multiDataBtn.addEventListener("click", () => {
   var tickerLabel = document.createElement("label")
   tickerLabel.innerHTML = "Ticker: "
   var tickerInput = document.createElement("input")
+  tickerInput.id="tick"
+
 
   var deleteButton = document.createElement("button")
   deleteButton.textContent = "Delete"
@@ -164,6 +166,7 @@ multiDataBtn.addEventListener("click", () => {
 multiSmaBtn.addEventListener("click", ()=>{
 
   var date = document.createElement("select")
+  date.id="date"
   for (var i = 0; i < dateRange.length; i++){
     var option = document.createElement("option");
     option.value = dateRange[i];
@@ -172,6 +175,7 @@ multiSmaBtn.addEventListener("click", ()=>{
   }
 
   var interval = document.createElement("select")
+  interval.id="interval"
   for (var j = 0; j < intervalRange.length; j++){
     var option = document.createElement("option");
     option.value = intervalRange[j];
@@ -188,6 +192,7 @@ multiSmaBtn.addEventListener("click", ()=>{
   var tickerLabel = document.createElement("label")
   tickerLabel.innerHTML = "Ticker: "
   var tickerInput = document.createElement("input")
+  tickerInput.id="tick"
 
   var deleteButton = document.createElement("button")
   deleteButton.textContent = "Delete"
@@ -200,6 +205,7 @@ multiSmaBtn.addEventListener("click", ()=>{
   rangeLabel = document.createElement("label")
   range=document.createElement("input")
   rangeLabel.innerHTML="SMA Range: "
+  range.id="smaRange"
 
   var breakInContent = document.createElement("br")
 
@@ -217,11 +223,60 @@ multiSmaBtn.addEventListener("click", ()=>{
 })
 
 multiChartBtn.addEventListener("click", () => {
-  // Outline for the button:
-  // Iterate through each child element of slotMultiSma and slotMultiData
-  // Collect the data and start fetching from the backend
-  // Store the data/labels in arrays
-  // Iterate through the arrays to plot mulitiple plots
-  console.log(slotMultiSma.childElementCount)
-  // alert("Clicked the chart button!")
-})
+  var labels = []
+  var strings = []
+  for (var i = 0; i<slotMultiData.childElementCount; i++){
+    var childNode = slotMultiData.childNodes[i]
+    var tick = childNode.querySelector("#tick").value
+    var date = childNode.querySelector("#date").value
+    var interval = childNode.querySelector("#interval").value
+    var string = `http://127.0.0.1:5000/data?tick=${tick}&hist=${date}&interval=${interval}`
+    var label = `${tick} ${date} ${interval} data`
+    strings.push(string)
+    labels.push(label)
+  }
+  for (var j = 0; j<slotMultiSma.childElementCount; j++){
+    var childNode = slotMultiSma.childNodes[j]
+    var tick = childNode.querySelector("#tick").value
+    var date = childNode.querySelector("#date").value
+    var interval = childNode.querySelector("#interval").value
+    var range = childNode.querySelector("#smaRange").value
+    var string = `http://127.0.0.1:5000/sma?tick=${tick}&range=${range}&hist=${date}&interval=${interval}`
+    var label = `${tick} ${date} ${interval} sma`
+    strings.push(string)
+    labels.push(label)
+  }
+
+  
+  datas = []
+  strings.map(async (string) => {
+    var temp = await fetch(string)
+      .then(data=>{data.text()
+        .then(text2 =>{
+        datas.push(text2)
+        if (datas.length == strings.length){
+          handler(datas, labels)
+        }
+      }
+      )})
+})})
+
+
+function handler(data, labels){
+  console.log(data,labels)
+  ret_arr = []
+  for(var i =0; i< data.length; i++){
+    var close_data = JSON.parse(data[i]).Close
+    plotData = parseData(close_data)
+    var trace1 = {
+      x: plotData[0],
+      y: plotData[1],
+      name: labels[i],
+      type: 'scatter'
+    };
+    ret_arr.push(trace1)
+  }
+
+  Plotly.newPlot('myDiv', ret_arr);
+
+}
