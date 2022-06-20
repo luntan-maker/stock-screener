@@ -16,6 +16,18 @@ const checkBox = document.getElementById("multigraph")
 dateRange = ["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"]
 intervalRange=["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo"]
 
+function plotData(labels, data){
+  var trace1 = {
+    x: labels,//#[1, 2, 3, 4],
+    y: data,
+    type: 'scatter'
+  };
+  
+  var data = [trace1]//, trace2];
+
+  Plotly.newPlot('myDiv', data);
+  
+}
 
 btn.addEventListener("click", async () =>{
   console.log("Hello")
@@ -39,7 +51,16 @@ btn.addEventListener("click", async () =>{
       var data = parseData(close_data);
       var labels = data[0]
       var datum = data[1]
-      plotData(labels, datum)
+      // plotData(labels, datum)
+      var trace1 = {
+        x: labels,//#[1, 2, 3, 4],
+        y: datum,
+        type: 'scatter'
+      };
+      
+      var data = [trace1]//, trace2];
+
+      Plotly.newPlot('myDiv', data);
       
 
     })
@@ -80,18 +101,6 @@ function parseData(close_data){
   return [labels2, datum]
 }
 
-function plotData(labels, data){
-  var trace1 = {
-    x: labels,//#[1, 2, 3, 4],
-    y: data,
-    type: 'scatter'
-  };
-  
-  var data = [trace1]//, trace2];
-
-  Plotly.newPlot('myDiv', data);
-  
-}
 
 checkBox.addEventListener("change", () => {
   singleChart = document.getElementById("singleChart")
@@ -242,7 +251,7 @@ multiChartBtn.addEventListener("click", () => {
     var interval = childNode.querySelector("#interval").value
     var range = childNode.querySelector("#smaRange").value
     var string = `http://127.0.0.1:5000/sma?tick=${tick}&range=${range}&hist=${date}&interval=${interval}`
-    var label = `${tick} ${date} ${interval} sma`
+    var label = `${tick} ${date} ${interval} ${range} sma`
     strings.push(string)
     labels.push(label)
   }
@@ -264,6 +273,7 @@ multiChartBtn.addEventListener("click", () => {
 
 function handler(data, labels){
   console.log(data,labels)
+  
   ret_arr = []
   for(var i =0; i< data.length; i++){
     var close_data = JSON.parse(data[i]).Close
